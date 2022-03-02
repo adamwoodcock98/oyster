@@ -31,9 +31,8 @@ class Oystercard
 
   end
 
-  def in_journey
-    return true if entry_station != nil
-    false
+  def in_journey?
+    entry_station != nil
   end
 
   

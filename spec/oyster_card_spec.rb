@@ -63,13 +63,13 @@ describe Oystercard do
     it 'should return true if touched in' do
       # subject.top_up(1)
       # subject.touch_in(:entry_station)
-      expect(subject.in_journey).to eq true
+      expect(subject).to be_in_journey
     end
     it 'should return false if touched out' do
       # subject.top_up(1)
       # subject.touch_in(:entry_station)
       subject.touch_out(:exit_station)
-      expect(subject.in_journey).to eq false
+      expect(subject).to_not be_in_journey
     end
   end
 
