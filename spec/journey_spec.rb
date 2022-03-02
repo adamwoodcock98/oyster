@@ -2,31 +2,59 @@ require 'journey.rb'
 
 describe Journey do
 
-end
+  let(:station1) { double :station1, zone: 1}
+  let(:station2) { double :station2, zone: 1}
 
-it 'forgets entry station when touched out' do
-  subject.touch_out(:exit_station)
-  expect(subject.entry_station).to eq nil
-end
 
-it 'saves exit station when touched out' do
-  subject.touch_out(:exit_station)
-  expect(subject.exit_station).to eq :exit_station
-end
+  it 'should return a penalty fare by default' do
+    expect(subject.fare).to eq Journey::PENALTY
+  end
 
-"touch in describe"
+  it 'should know if a journey is complete' do
+    expect(subject.complete?).to eq false
+  end
 
-it 'should return true if touched in' do
-  expect(subject).to be_in_journey
-end
+  it 'should save an entry station' do
+    journey = Journey.new(station1)
+    expect(journey.entry_station).to eq station1
+  end
 
-it 'should return false if touched out' do
-  subject.touch_out(:exit_station)
-  expect(subject).to_not be_in_journey
-end
+  it 'should save an exit station' do
+    journey = Journey.new(station1)
+    journey.finish(station2)
+    expect(journey.exit_station).to eq station2
+  end
 
-it 'after touched in saves the entry station' do
-  subject.top_up(1)
-  subject.touch_in(:entry_station)
-  expect(subject.entry_station).to eq :entry_station
+  it 'should return itself when finished' do
+    journey = Journey.new(station1)
+    expect(journey.finish(station1)).to eq journey
+  end
+
+  context "if only touched in" do
+    # before do
+    #   journey = Journey.new(station1)
+    # end
+    it 'should calculate a penalty fare' do
+      journey = Journey.new(station1)
+      journey.finish
+      expect(journey.fare).to eq Journey::PENALTY
+    end
+  end
+
+  context 'if only touched out' do
+    it 'should calculate a penalty fare' do
+      journey = Journey.new
+      journey.finish(station2)
+      expect(journey.fare).to eq Journey::PENALTY
+    end
+  end
+
+  context 'if touched in and touched out' do
+    it 'should calculate minimum fare' do
+      journey = Journey.new(station1)
+      journey.finish(station2)
+      expect(journey.fare).to eq Journey::FARE
+    end
+  end
+
 end
