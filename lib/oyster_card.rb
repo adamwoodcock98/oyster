@@ -16,6 +16,7 @@ class Oystercard
 
   def touch_in(station)
     raise "Insufficient balance" if @balance < Journey::FARE
+    deduct(Journey::PENALTY) if @current_journey != nil
     @current_journey = Journey.new(station)
   end
 
@@ -23,21 +24,18 @@ class Oystercard
     @current_journey = Journey.new if @current_journey == nil
     @current_journey.finish(station)
     deduct(@current_journey.fare) 
-
-
-
-    # comes later
-    @journey_list << { :journey => Journey.new } # need updating
-  end
-
-  def save_journey(journey)
-    #does the saving
   end
 
   private
 
+  def save_journey
+    @journey_list << @current_journey
+    @current_journey = nil
+  end
+
   def deduct(value)
     @balance -= value
+    save_journey
   end
 
   def limit_reached?

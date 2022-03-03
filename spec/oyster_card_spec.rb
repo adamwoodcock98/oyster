@@ -36,6 +36,12 @@ describe Oystercard do
         expect(subject.current_journey).to_not be_nil
       end
 
+      it 'should return a penalty when touching in twice in a row' do
+        subject.top_up(10)
+        subject.touch_in(station1)
+        expect { subject.touch_in(station2) }.to change { subject.balance }.by(-Journey::PENALTY)
+      end
+
     end
 
   describe "touch_out" do
@@ -55,26 +61,16 @@ describe Oystercard do
   end
 
   describe 'list of journeys' do
+    let(:journey) {double :journey}
     it 'should have an empty list of journeys by default' do
       expect(subject.journey_list).to be_empty
     end
 
-    # we touch in, we touch out, we pass a journey double, the journey list includes that double
-
-    # save a journey, journey list includes journey. receives a journey back
-
-    
-
-    # it 'should save a journey' do
-    #   subject.top_up(1)
-    #   subject.touch_in(:entry_station)
-    #   subject.touch_out(:exit_station)
-    #   journey = {:entry_station => :entry_station, :exit_station => :exit_station}
-    #   #expect(subject.journeys(entry_station, exit_station)).to eq journey
-    #   expect(subject.journey_list).to include journey #logic to change, end result to stay the same
-    # end
+    it 'should save a journey into journey list' do
+      subject.top_up(10)
+      subject.touch_in(station1)
+      subject.touch_out(station2)
+      expect(subject.journey_list).to_not be_empty
+    end
   end
 end
-
-
-# edge case: to deduct penalty for not touching out, this would need testing when they touch in twice in a row, once hits +24 hours
