@@ -30,6 +30,10 @@ class Oystercard
     @journey_list << { :journey => Journey.new } # need updating
   end
 
+  def save_journey(journey)
+    #does the saving
+  end
+
   private
 
   def deduct(value)
