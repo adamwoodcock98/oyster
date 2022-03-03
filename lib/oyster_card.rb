@@ -4,7 +4,6 @@ class Oystercard
   def initialize
     @balance = 0
     @journey_list = []
-    @current_journey = Journey.new
   end 
 
   attr_reader :balance, :journey_list, :current_journey
@@ -16,11 +15,18 @@ class Oystercard
   end
 
   def touch_in(station)
-    raise "Insufficient balance" if @balance < @current_journey.fare #will be dependent on Journey class
+    raise "Insufficient balance" if @balance < Journey::FARE
+    @current_journey = Journey.new(station)
   end
 
   def touch_out(station)
-    deduct(@current_journey.fare) #will be dependent on Journey
+    @current_journey = Journey.new if @current_journey == nil
+    @current_journey.finish(station)
+    deduct(@current_journey.fare) 
+
+
+
+    # comes later
     @journey_list << { :journey => Journey.new } # need updating
   end
 

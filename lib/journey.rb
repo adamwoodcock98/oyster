@@ -1,15 +1,11 @@
 class Journey
 
-  attr_reader :in_journey, :entry_station, :exit_station #maybe needs initialising again
+  attr_reader :entry_station, :exit_station #maybe needs initialising again
   FARE = 1
   PENALTY = 6
 
   def initialize(station = nil)
     @entry_station = station
-  end
-
-  def in_journey?
-    entry_station != nil
   end
 
   def fare
