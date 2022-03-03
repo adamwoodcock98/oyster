@@ -52,14 +52,6 @@ describe Oystercard do
       expect { subject.touch_out(station2) }.to change { subject.balance }.by(-Journey::FARE)
     end
 
-    # once touched out - complete journey (has a minimum fare), receives a journey back
-
-    # if they don't touch in first
-
-    # it "deducts fare when touched out" do
-    #   expect{ subject.touch_out(:exit_station) }.to change{ subject.balance }.by(-1)
-    # end 
-
   end
 
   describe 'list of journeys' do
@@ -67,7 +59,9 @@ describe Oystercard do
       expect(subject.journey_list).to be_empty
     end
 
-    # save a journey, journey list includes journey.
+    # we touch in, we touch out, we pass a journey double, the journey list includes that double
+
+    # save a journey, journey list includes journey. receives a journey back
 
     
 
