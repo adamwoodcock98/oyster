@@ -1,6 +1,6 @@
 class Journey
 
-  attr_reader :entry_station, :exit_station #maybe needs initialising again
+  attr_accessor :entry_station, :exit_station #maybe needs initialising again
   FARE = 1
   PENALTY = 6
 
@@ -21,12 +21,5 @@ class Journey
   def complete?
     @entry_station != nil && @exit_station != nil
   end
-
-
-  # @entry_station = station # from touch in method
-
-  # @exit_station = station # from touch out method
-  # @entry_station = nil # from touch out method
-
 
 end
