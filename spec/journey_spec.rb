@@ -20,40 +20,36 @@ describe Journey do
   end
 
   it 'should save an exit station' do
-    journey = Journey.new(station1)
-    journey.finish(station2)
-    expect(journey.exit_station).to eq station2
+    subject.exit_station=station2
+    expect(subject.exit_station).to eq station2
   end
 
-  it 'should return itself when finished' do
-    journey = Journey.new(station1)
-    expect(journey.finish(station1)).to eq journey
-  end
+  # it 'should return itself when finished' do
+  #   journey = Journey.new(station1)
+  #   expect(journey.finish(station1)).to eq journey
+  # end
 
   context "if only touched in" do
     # before do
     #   journey = Journey.new(station1)
     # end
     it 'should calculate a penalty fare' do
-      journey = Journey.new(station1)
-      journey.finish
-      expect(journey.fare).to eq Journey::PENALTY
+      expect(subject.fare).to eq Journey::PENALTY
     end
   end
 
   context 'if only touched out' do
     it 'should calculate a penalty fare' do
-      journey = Journey.new
-      journey.finish(station2)
-      expect(journey.fare).to eq Journey::PENALTY
+
+      expect(subject.fare).to eq Journey::PENALTY
     end
   end
 
   context 'if touched in and touched out' do
     it 'should calculate minimum fare' do
-      journey = Journey.new(station1)
-      journey.finish(station2)
-      expect(journey.fare).to eq Journey::FARE
+      subject.entry_station = station1
+      subject.exit_station = station2
+      expect(subject.fare).to eq Journey::FARE
     end
   end
 

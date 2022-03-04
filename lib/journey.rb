@@ -13,10 +13,10 @@ class Journey
     return PENALTY 
   end
 
-  def finish(station = nil)
-    @exit_station = station
-    self
-  end
+  # def finish(station = nil)
+  #   @exit_station = station
+  #   self
+  # end
 
   def complete?
     @entry_station != nil && @exit_station != nil

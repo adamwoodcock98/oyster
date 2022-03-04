@@ -1,14 +1,18 @@
 require_relative 'journey'
 
 class Oystercard 
-  def initialize
+  def initialize(journey_log = JourneyLog.new)
     @balance = 0
     @journey_list = []
+    @journey_log = journey_log
   end 
 
   attr_reader :balance, :journey_list, :current_journey
   LIMIT = 90
 
+  def journey_log
+    @journey_log
+  end
   def top_up(value)
     raise "Your balance is now £#{@balance}. Maximum limit of £90 reached" if limit_reached?
     @balance += value
@@ -16,26 +20,20 @@ class Oystercard
 
   def touch_in(station)
     raise "Insufficient balance" if @balance < Journey::FARE
-    deduct(Journey::PENALTY) if @current_journey != nil
-    @current_journey = Journey.new(station)
+    deduct(Journey::PENALTY) if @journey_log.journey != nil
+    @journey_log.start(station)
   end
 
   def touch_out(station)
-    @current_journey = Journey.new if @current_journey == nil
-    @current_journey.finish(station)
-    deduct(@current_journey.fare) 
+    @journey_log.finish(station)
+    deduct(@journey_log.journey.fare)
   end
 
   private
 
-  def save_journey
-    @journey_list << @current_journey
-    @current_journey = nil
-  end
 
   def deduct(value)
     @balance -= value
-    save_journey
   end
 
   def limit_reached?
